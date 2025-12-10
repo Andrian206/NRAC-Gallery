@@ -1,0 +1,7 @@
+intinya bkin web jual beli ikan, bisa showcase ikan juga dimana ikannya itu unik dengan 1 stok khusus yang dirancang
+untuk menunjang proses bisnis admin, user, dan guest dalam menunjang bisnis hobi ikan hias. rencana sih kalo bisa
+sampe deploy di hosting gratis, database cloud gratis juga untuk bahan belajar, rencana belajar pake html, css, js pakai framework
+CI4 atau tidak sama skli tidak masalah yang penting MVC sebagai bahan belajar juga.
+rencana itu bisa register, login, muncul home lngsung aja untuk sementara dengan card view berisi foto ikan, jenis ikan (smisal ikan cupang, guppy dan lain2), harga, lokasi yang sudah diset "Kuningan"
+data2 di card view itu diinput oleh admin bisa memilih 4 foto dan 1 video (max 20mb), jenis ikan, harga. card view di home itu hanya 1 gambar, jenis ikan, harga dan lokasi. jika ingin info detail hrus klik
+nnti akan masuk seperti halaman baru yang lebih detail dimana ada button Beli dan Keranjang. 
