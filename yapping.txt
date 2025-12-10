@@ -3,5 +3,9 @@ untuk menunjang proses bisnis admin, user, dan guest dalam menunjang bisnis hobi
 sampe deploy di hosting gratis, database cloud gratis juga untuk bahan belajar, rencana belajar pake html, css, js pakai framework
 CI4 atau tidak sama skli tidak masalah yang penting MVC sebagai bahan belajar juga.
 rencana itu bisa register, login, muncul home lngsung aja untuk sementara dengan card view berisi foto ikan, jenis ikan (smisal ikan cupang, guppy dan lain2), harga, lokasi yang sudah diset "Kuningan"
-data2 di card view itu diinput oleh admin bisa memilih 4 foto dan 1 video (max 20mb), jenis ikan, harga. card view di home itu hanya 1 gambar, jenis ikan, harga dan lokasi. jika ingin info detail hrus klik
-nnti akan masuk seperti halaman baru yang lebih detail dimana ada button Beli dan Keranjang. 
+data2 di card view itu diinput oleh admin bisa memilih 4 foto dan 1 video (max 20mb), jenis ikan, harga dan deskripsi. card view di home itu hanya 1 gambar, jenis ikan, harga dan lokasi. jika ingin info detail hrus klik
+nnti akan masuk seperti halaman baru yang lebih detail informasi tergantung input admin serta ada button Beli dan Keranjang. 
+di Keranjang nnti bisa milih pesanan yang ingin dicheckout dan tidak serta sblum klik checkout ada preview harganya juga. dan status pembelian atau invoice itu nyambung ke admin.
+admin bisa hapus ikan yang di show ya intinya bisa Tambah, edit, dan hapus. rencana dasar dlu hingga saya paham.
+ketika msuk web itu ada display seperti useer tpi gbisa checkout dan ke keranjang krn blum login. klo dipikiran saya begini sih saat ini, moga saja kekejar.
+msih bingung sih nentuin start dan mulai eksekusi hrus drmn
