@@ -1,1 +1,1 @@
-Sekalian belajar GitHub dasar
+Sekalian belajar GitHub dasar, kok pusing ya Day 1 xixiix

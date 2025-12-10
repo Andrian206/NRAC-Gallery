@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toko Ikan Online</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="page active">
+        <div class="container">
+            <div class="login-box">
+                <h1>Iwak Online</h1>
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <input type="text" id="username" placeholder="Username" required>
+                    <input type="password" id="password" placeholder="Password" required>
+                    <button type="submit">Login</button>
+                </form>
+                <p class="info">Demo Account:<br>
+                    Admin: admin / admin123<br>
+                    User: user / user123
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminPage" class="page">
+        <nav class="navbar">
+            <h1>🐟 Admin Panel</h1>
+            <div class="nav-right">
+                <span id="adminName"></span>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="admin-section">
+                <h2>Tambah Produk Ikan</h2>
+                <form id="addProductForm">
+                    <input type="text" id="productName" placeholder="Nama Ikan" required>
+                    <input type="file" id="productImage" accept="image/*" required>
+                    <input type="number" id="productPrice" placeholder="Harga (Rp)" required>
+                    <input type="text" id="productLocation" placeholder="Lokasi (otomatis terdeteksi)" readonly>
+                    <input type="text" id="sellerName" placeholder="Nama Seller" readonly>
+                    <button type="submit">Tambah Produk</button>
+                </form>
+            </div>
+
+            <div class="admin-section">
+                <h2>Daftar Produk</h2>
+                <div id="adminProductList" class="product-grid"></div>
+            </div>
+
+            <div class="admin-section">
+                <h2>Pesanan Masuk</h2>
+                <div id="orderList" class="order-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Page -->
+    <div id="userPage" class="page">
+        <nav class="navbar">
+            <h1>🐟 Toko Ikan Online</h1>
+            <div class="nav-right">
+                <span id="userName"></span>
+                <button onclick="showCart()" class="cart-btn">
+                    🛒 Keranjang (<span id="cartCount">0</span>)
+                </button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </nav>
+
+        <div class="container">
+            <h2>Produk Tersedia</h2>
+            <div id="userProductList" class="product-grid"></div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCart()">&times;</span>
+            <h2>Keranjang Belanja</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total">
+                <h3>Total: Rp <span id="totalPrice">0</span></h3>
+                <button onclick="checkout()" class="checkout-btn">Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+
+Plan: Membuat Website Jual Beli Ikan dengan HTML, CSS, dan JavaScript
+TL;DR: Fokus pada pengembangan website menggunakan HTML, CSS, dan JavaScript tanpa framework backend. Data akan disimulasikan menggunakan file JSON atau JavaScript object untuk sementara. Fitur utama meliputi register/login, halaman home dengan card view, detail ikan, keranjang belanja, dan admin panel untuk CRUD data ikan.
+
+Steps
+    1. Setup Awal dan Struktur Proyek
+        Buat struktur folder berikut:
+        File utama:
+        index.html: Halaman utama (home).
+        admin.html: Halaman admin untuk CRUD ikan.
+        login.html: Halaman login/register.
+        detail.html: Halaman detail ikan.
+        cart.html: Halaman keranjang belanja.
+
+    2. Desain Database Sementara
+        Gunakan file JSON atau JavaScript object untuk menyimpan data sementara:
+        data/fish.json: Data ikan (id, nama, jenis, harga, deskripsi, lokasi, foto, video).
+        data/users.json: Data user (id, username, password, role).
+        data/cart.json: Data keranjang (id, user_id, fish_id, jumlah).
+
+    3. Implementasi Fitur Utama
+        Halaman Login/Register:
+            Buat form login dan register di login.html.
+            Simpan data user di data/users.json (simulasi).
+            Gunakan JavaScript untuk validasi login dan register.
+        Halaman Home (Card View):
+            Ambil data ikan dari data/fish.json menggunakan JavaScript.
+            Tampilkan card view (gambar, jenis, harga, lokasi) di index.html.
+        Halaman Detail Ikan:
+            Ambil data ikan berdasarkan ID dari data/fish.json.
+            Tampilkan detail ikan di detail.html (gambar, deskripsi, harga, lokasi, tombol "Beli").
+        Keranjang Belanja:
+            Tambahkan ikan ke keranjang menggunakan JavaScript.
+            Simpan data keranjang di data/cart.json (simulasi).
+            Tampilkan keranjang di cart.html dengan preview harga.
+        Admin Panel (CRUD Ikan):
+            Buat form tambah/edit ikan di admin.html.
+            Simpan data ikan di data/fish.json menggunakan JavaScript.
+            Tampilkan daftar ikan dengan tombol edit dan hapus.
+
+    4. Styling dengan CSS
+        Buat file assets/css/style.css untuk styling global.
+        Gunakan CSS Grid atau Flexbox untuk layout card view dan halaman lainnya.
+        Tambahkan responsivitas untuk tampilan mobile.
+    5. Testing dan Debugging
+
+Jalankan website di browser menggunakan Live Server (VS Code).
+    Uji setiap fitur:
+        Register/login.
+        Menampilkan ikan di home.
+        Detail ikan.
+        Keranjang dan checkout.
+        CRUD admin.
+
+Modular Breakdown (Fokus Utama)
+    Setup Proyek dan Data Sementara:
+        Struktur folder dan file utama.
+        File JSON untuk data sementara.
+    Fitur Login/Register:
+        Form login/register dan validasi.
+    Halaman Home (Card View):
+        Menampilkan ikan dengan gambar, jenis, harga, lokasi.
+    Halaman Detail Ikan:
+        Informasi lengkap ikan dengan tombol "Beli".
+    Keranjang Belanja:
+        Tambah ke keranjang, preview harga, dan checkout.
+    Admin Panel (CRUD Ikan):
+        Tambah, edit, hapus ikan.
+        
+Further Considerations
+Hosting Gratis: Gunakan Netlify atau GitHub Pages untuk deploy.
+Backend di Masa Depan: Jika ingin menambahkan backend, gunakan PHP atau Node.js.
+Fitur Tambahan: Tambahkan filter ikan, pencarian, atau fitur lain setelah fitur utama selesai.
+Jika Anda butuh detail lebih lanjut untuk setiap langkah, beri tahu! - File utama:
+- index.html: Halaman utama (home).
+- admin.html: Halaman admin untuk CRUD ikan.
+- login.html: Halaman login/register.
+- detail.html: Halaman detail ikan.
+- cart.html: Halaman keranjang belanja.
+
+2. Desain Database Sementara
+Gunakan file JSON atau JavaScript object untuk menyimpan data sementara:
+data/fish.json: Data ikan (id, nama, jenis, harga, deskripsi, lokasi, foto, video).
+data/users.json: Data user (id, username, password, role).
+data/cart.json: Data keranjang (id, user_id, fish_id, jumlah).
+3. Implementasi Fitur Utama
+Halaman Login/Register:
+Buat form login dan register di login.html.
+Simpan data user di data/users.json (simulasi).
+Gunakan JavaScript untuk validasi login dan register.
+Halaman Home (Card View):
+Ambil data ikan dari data/fish.json menggunakan JavaScript.
+Tampilkan card view (gambar, jenis, harga, lokasi) di index.html.
+Halaman Detail Ikan:
+Ambil data ikan berdasarkan ID dari data/fish.json.
+Tampilkan detail ikan di detail.html (gambar, deskripsi, harga, lokasi, tombol "Beli").
+Keranjang Belanja:
+Tambahkan ikan ke keranjang menggunakan JavaScript.
+Simpan data keranjang di data/cart.json (simulasi).
+Tampilkan keranjang di cart.html dengan preview harga.
+Admin Panel (CRUD Ikan):
+Buat form tambah/edit ikan di admin.html.
+Simpan data ikan di data/fish.json menggunakan JavaScript.
+Tampilkan daftar ikan dengan tombol edit dan hapus.
+4. Styling dengan CSS
+Buat file assets/css/style.css untuk styling global.
+Gunakan CSS Grid atau Flexbox untuk layout card view dan halaman lainnya.
+Tambahkan responsivitas untuk tampilan mobile.
+5. Testing dan Debugging
+Jalankan website di browser menggunakan Live Server (VS Code).
+Uji setiap fitur:
+Register/login.
+Menampilkan ikan di home.
+Detail ikan.
+Keranjang dan checkout.
+CRUD admin.
+Modular Breakdown (Fokus Utama)
+Setup Proyek dan Data Sementara:
+Struktur folder dan file utama.
+File JSON untuk data sementara.
+Fitur Login/Register:
+Form login/register dan validasi.
+Halaman Home (Card View):
+Menampilkan ikan dengan gambar, jenis, harga, lokasi.
+Halaman Detail Ikan:
+Informasi lengkap ikan dengan tombol "Beli".
+Keranjang Belanja:
+Tambah ke keranjang, preview harga, dan checkout.
+Admin Panel (CRUD Ikan):
+Tambah, edit, hapus ikan.
+Further Considerations
+Hosting Gratis: Gunakan Netlify atau GitHub Pages untuk deploy.
+Backend di Masa Depan: Jika ingin menambahkan backend, gunakan PHP atau Node.js.
+Fitur Tambahan: Tambahkan filter ikan, pencarian, atau fitur lain setelah fitur utama selesai.
