@@ -1,1 +1,1 @@
-Sekalian belajar GitHub dasar, kok pusing ya Day 1 xixiix
+Berusaha Ngoding, Kalo ada bug langsung informasikan ke saya
