@@ -1,19 +1,18 @@
 body {
-    background-color: rgb(84, 86, 184);
+    background-color: #5456b8;
 }
 
 h1 {
     text-align: center;
-    color: rgb(0, 0, 0);
+    color:  #5456b8;
     margin-top: 0px;
     font-family: 'Arial', sans-serif;
 }
 .container {
     width: auto;
-    margin: 80px;
+    margin: 30px;
     padding: 30px;  
-    border-radius: 10px;
-    border: 2px solid #ddd;
+    border-radius: 15px;
     font-family: Arial, sans-serif;
     background-color: white;
 }
@@ -21,20 +20,19 @@ h1 {
 .grid-ikan {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
+    gap: 0px;
 }
 
 .card {
-    border: 1px solid #ddd;
-    border-radius: 15px;
-    padding: 10px;
-    text-align: center;
+    padding: 8px;
+    text-align: left;
+    cursor: pointer;
 }
 
 .card img {
     width: 100%;
     height: 150px;
-    border-radius: 5px;
+    border-radius: 10px;
     object-fit: cover;
 }
 

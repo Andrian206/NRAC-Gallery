@@ -9,3 +9,5 @@ di Keranjang nnti bisa milih pesanan yang ingin dicheckout dan tidak serta sblum
 admin bisa hapus ikan yang di show ya intinya bisa Tambah, edit, dan hapus. rencana dasar dlu hingga saya paham.
 ketika msuk web itu ada display seperti useer tpi gbisa checkout dan ke keranjang krn blum login. klo dipikiran saya begini sih saat ini, moga saja kekejar.
 msih bingung sih nentuin start dan mulai eksekusi hrus drmn
+
+Malas menanggapi ruwet juga bkin web, berusaha JS saja biar sklian belajar next.js

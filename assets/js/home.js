@@ -27,7 +27,6 @@ function tampilkanKeLayar(listIkan) {
                 <h3>${ikan.nama}</h3>
                 <p class="harga">Rp. ${ikan.harga.toLocaleString()}</p>
                 <p>${ikan.lokasi}</p>
-                <button onclick="lihatDetail(${ikan.id})">Lihat Detail</button>
             </div>
         `
         wadah.innerHTML += elemenIkan
