@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Toko Ikan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/profile.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <!-- ==================== HEADER ==================== -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <img src="assets/fish.png" alt="Logo Toko Ikan">
+                </a>
+
+                <!-- Search Bar -->
+                <div class="search-wrapper">
+                    <input type="text" id="searchInput" placeholder="Ikan anda menunggu anda" class="search-input">
+                </div>
+
+                <!-- Navigation -->
+                <div class="nav-buttons">
+                    <a href="cart.html" class="btn-link">Keranjang</a>
+                    <a href="profile.html" class="btn-outline active">Profile</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main>
+        <div class="container">
+            <!-- Back Link -->
+            <a href="index.html" class="back-link">&larr; Kembali ke Beranda</a>
+            
+            <div class="profile-container">
+                <!-- Profile Card -->
+                <div class="profile-card">
+                    <h1 class="profile-title">Profil Saya</h1>
+                    
+                    <div class="profile-info">
+                        <div class="profile-avatar">
+                            <span id="avatarInitial">U</span>
+                        </div>
+                        <div class="profile-details">
+                            <h2 id="userName">Loading...</h2>
+                            <p id="userEmail">Loading...</p>
+                        </div>
+                    </div>
+
+                    <div class="profile-actions">
+                        <button class="btn btn-danger" onclick="handleLogout()">Logout</button>
+                    </div>
+                </div>
+
+                <!-- My Orders -->
+                <div class="orders-section">
+                    <h2 class="section-title">Riwayat Pesanan</h2>
+                    <div id="ordersList" class="orders-list">
+                        <div class="loading">
+                            <div class="loading-spinner"></div>
+                            <p>Memuat riwayat...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <a href="index.html" class="logo">
+                    <img src="assets/fish.png" alt="Logo Toko Ikan">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script src="assets/js/supabase.js"></script>
+    <script>
+        // ==========================================
+        // PROFILE PAGE SCRIPTS
+        // ==========================================
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('👤 Profile page loaded');
+            
+            const user = await getCurrentUser();
+            if (!user) {
+                showNotification('Silakan login terlebih dahulu', 'error');
+                setTimeout(() => window.location.href = 'index.html', 1500);
+                return;
+            }
+
+            console.log('👤 User:', user.email);
+            loadProfile(user);
+            await loadOrders();
+        });
+
+        // Load user profile
+        function loadProfile(user) {
+            const nama = user.user_metadata?.nama || user.email.split('@')[0];
+            document.getElementById('userName').textContent = nama;
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('avatarInitial').textContent = nama.charAt(0).toUpperCase();
+        }
+
+        // Load orders (ikan yang sudah dibeli/dipesan)
+        async function loadOrders() {
+            const ordersList = document.getElementById('ordersList');
+            
+            try {
+                // Get ikan with status Dipesan or Terjual
+                const { data: orders, error } = await supabaseClient
+                    .from('ikan')
+                    .select('*')
+                    .in('status_ikan', [STATUS_IKAN.DIPESAN, STATUS_IKAN.TERJUAL])
+                    .order('updated_at', { ascending: false });
+
+                console.log('📦 Orders loaded:', orders?.length || 0);
+
+                if (error) {
+                    console.error('Load orders error:', error);
+                    throw error;
+                }
+
+                if (!orders || orders.length === 0) {
+                    ordersList.innerHTML = `
+                        <div class="orders-empty">
+                            <p>Belum ada pesanan.</p>
+                            <a href="index.html" class="btn btn-primary" style="margin-top: 15px;">Mulai Belanja</a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                ordersList.innerHTML = orders.map(order => `
+                    <div class="order-item">
+                        <div class="order-image">
+                            ${order.url_foto 
+                                ? `<img src="${order.url_foto}" alt="${order.kode_ikan}" onerror="this.style.display='none'">` 
+                                : ''}
+                        </div>
+                        <div class="order-info">
+                            <div class="order-kode">${order.kode_ikan}</div>
+                            <div class="order-lokasi">${order.lokasi || ''}</div>
+                            <div class="order-price">${formatRupiah(order.harga)}</div>
+                        </div>
+                        <div class="order-status status-${order.status_ikan.toLowerCase()}">
+                            ${order.status_ikan}
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Load orders error:', error);
+                ordersList.innerHTML = `
+                    <div class="orders-empty">
+                        <p>Gagal memuat riwayat pesanan.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Handle logout
+        async function handleLogout() {
+            try {
+                await signOut();
+                showNotification('Logout berhasil!', 'success');
+                setTimeout(() => window.location.href = 'index.html', 1500);
+            } catch (error) {
+                console.error('Logout error:', error);
+                showNotification('Gagal logout', 'error');
+            }
+        }
+
+        // Search redirect
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                window.location.href = `index.html?search=${encodeURIComponent(e.target.value)}`;
+            }
+        });
+    </script>
+
+</body>
+</html>

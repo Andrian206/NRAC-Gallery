@@ -1,0 +1,206 @@
+/* ==========================================
+   PROFILE PAGE STYLES
+   ========================================== */
+
+/* Back Link */
+.back-link {
+    display: inline-block;
+    color: var(--primary-blue);
+    font-weight: 500;
+    margin-bottom: 20px;
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.back-link:hover {
+    opacity: 0.7;
+}
+
+.profile-container {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+/* Profile Card */
+.profile-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 40px 30px;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.profile-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 30px;
+}
+
+.profile-info {
+    margin-bottom: 30px;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    background: var(--primary-blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.profile-avatar span {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--white);
+}
+
+.profile-details h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 5px;
+}
+
+.profile-details p {
+    font-size: 14px;
+    color: var(--text-grey);
+}
+
+.profile-actions .btn {
+    width: 100%;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+/* Orders Section */
+.orders-section {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: var(--shadow);
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.orders-empty {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-grey);
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: var(--bg-content);
+    border-radius: var(--radius);
+}
+
+.order-image {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-blue);
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.order-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.order-info {
+    flex: 1;
+}
+
+.order-kode {
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 4px;
+}
+
+.order-lokasi {
+    font-size: 13px;
+    color: var(--text-grey);
+    margin-bottom: 4px;
+}
+
+.order-price {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black);
+}
+
+.order-status {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.order-status.status-dipesan {
+    background: rgba(50, 74, 161, 0.15);
+    color: var(--primary-blue);
+}
+
+.order-status.status-terjual {
+    background: rgba(71, 208, 107, 0.15);
+    color: #2fa852;
+}
+
+.order-status.status-tersedia {
+    background: rgba(0, 0, 0, 0.1);
+    color: #666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .profile-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .profile-card {
+        order: 1;
+    }
+    
+    .orders-section {
+        order: 2;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .profile-container {
+        grid-template-columns: 1fr;
+    }
+}

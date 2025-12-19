@@ -1,1 +1,1 @@
-Berusaha Ngoding, Kalo ada bug langsung informasikan ke saya
+Berusaha ngoding bikin web ikan clean dan minimalis (bingung mau edit gmn)

@@ -11,3 +11,4 @@ ketika msuk web itu ada display seperti useer tpi gbisa checkout dan ke keranjan
 msih bingung sih nentuin start dan mulai eksekusi hrus drmn
 
 Malas menanggapi ruwet juga bkin web, berusaha JS saja biar sklian belajar next.js
+yang penting jalan dlu nnti dimodikasi lgi, krn perlu ganti layanan database, auth dan framework lain nnti

@@ -1,0 +1,193 @@
+/* ==========================================
+   DETAIL PAGE STYLES
+   ========================================== */
+
+/* Back Link */
+.back-link {
+    display: inline-block;
+    color: var(--primary-blue);
+    font-weight: 500;
+    margin-bottom: 30px;
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.back-link:hover {
+    opacity: 0.7;
+}
+
+/* Detail Layout */
+.detail-container {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 50px;
+    align-items: start;
+}
+
+/* Image Section */
+.detail-image {
+    background: var(--primary-blue);
+    border-radius: var(--radius-lg);
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.detail-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.detail-image .no-image {
+    color: white;
+    font-size: 16px;
+    opacity: 0.7;
+}
+
+/* Info Section */
+.detail-info {
+    padding: 20px 0;
+}
+
+.detail-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.detail-kode {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--black);
+    margin: 0;
+}
+
+.detail-price {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 25px;
+}
+
+.detail-meta {
+    margin-bottom: 25px;
+}
+
+.meta-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.meta-label {
+    font-weight: 600;
+    color: #666;
+}
+
+.meta-value {
+    font-weight: 500;
+    color: var(--black);
+}
+
+.detail-category {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 20px;
+}
+
+.detail-description {
+    margin-bottom: 30px;
+}
+
+.detail-description h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--black);
+}
+
+.detail-description p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #333;
+    white-space: pre-line;
+}
+
+/* Status Badge */
+.status-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.status-badge.status-tersedia {
+    background-color: rgba(71, 208, 107, 0.15);
+    color: #2fa852;
+}
+
+.status-badge.status-dipesan {
+    background-color: rgba(50, 74, 161, 0.15);
+    color: var(--primary-blue);
+}
+
+.status-badge.status-terjual {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #666;
+}
+
+/* Action Buttons */
+.detail-actions {
+    display: flex;
+    gap: 15px;
+    max-width: 350px;
+}
+
+.detail-actions .btn {
+    flex: 1;
+    padding: 14px 24px;
+    font-size: 16px;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-state h3 {
+    font-size: 20px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .detail-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .detail-image {
+        max-width: 400px;
+    }
+    
+    .detail-kode {
+        font-size: 24px;
+    }
+    
+    .detail-price {
+        font-size: 28px;
+    }
+    
+    .detail-actions {
+        max-width: 100%;
+    }
+}

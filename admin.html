@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Kelola Produk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <!-- ==================== HEADER ==================== -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <img src="assets/fish.png" alt="Logo Toko Ikan">
+                </a>
+                <div class="search-wrapper">
+                    <input type="text" id="searchInput" placeholder="Cari ikan..." class="search-input">
+                </div>
+                <div class="nav-buttons">
+                    <a href="index.html" class="btn-link">Beranda</a>
+                    <a href="#" class="btn-outline" onclick="handleLogout()">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main>
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Kelola Produk Ikan</h1>
+                <button class="btn btn-success" onclick="openAddModal()">+ Tambah Ikan</button>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-row" id="statsRow">
+                <div class="stat-card">
+                    <div class="stat-number" id="statTersedia">0</div>
+                    <div class="stat-label">Tersedia</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statDipesan">0</div>
+                    <div class="stat-label">Dipesan</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statTerjual">0</div>
+                    <div class="stat-label">Terjual</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statTotal">0</div>
+                    <div class="stat-label">Total</div>
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all" onclick="filterByStatus('all')">Semua</button>
+                <button class="filter-tab" data-filter="Tersedia" onclick="filterByStatus('Tersedia')">Tersedia</button>
+                <button class="filter-tab" data-filter="Dipesan" onclick="filterByStatus('Dipesan')">Dipesan</button>
+                <button class="filter-tab" data-filter="Terjual" onclick="filterByStatus('Terjual')">Terjual</button>
+            </div>
+
+            <!-- Products Table -->
+            <div class="table-container">
+                <table class="data-table" id="productsTable">
+                    <thead>
+                        <tr>
+                            <th>Foto</th>
+                            <th>Kode</th>
+                            <th>Harga</th>
+                            <th>Lokasi</th>
+                            <th>Kategori</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="7" class="loading-cell">
+                                <div class="loading-spinner"></div>
+                                Memuat data...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- ==================== ADD/EDIT MODAL ==================== -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal modal-lg modal-scrollable">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 class="modal-title" id="modalTitle">Tambah Ikan Baru</h2>
+            
+            <div class="modal-body">
+                <form id="productForm" onsubmit="handleSubmit(event)">
+                    <input type="hidden" id="editId">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Harga (Rp) *</label>
+                            <input type="number" class="form-input" id="inputHarga" required placeholder="Contoh: 100000" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Lokasi *</label>
+                            <input type="text" class="form-input" id="inputLokasi" required placeholder="Contoh: Kuningan">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Kategori</label>
+                        <select class="form-input" id="inputKategori">
+                            <option value="">-- Pilih Kategori --</option>
+                            <option value="Ikan Cupang">Ikan Cupang</option>
+                            <option value="Ikan Koi">Ikan Koi</option>
+                            <option value="Ikan Guppy">Ikan Guppy</option>
+                            <option value="Ikan Arwana">Ikan Arwana</option>
+                            <option value="Ikan Louhan">Ikan Louhan</option>
+                            <option value="Ikan Mas Koki">Ikan Mas Koki</option>
+                            <option value="Ikan Discus">Ikan Discus</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+
+                    <!-- Image Input Options -->
+                    <div class="form-group">
+                        <label class="form-label">Foto Ikan</label>
+                        <div class="image-input-tabs">
+                            <button type="button" class="tab-btn active" onclick="switchImageTab('url')">URL Gambar</button>
+                            <button type="button" class="tab-btn" onclick="switchImageTab('file')">Upload File</button>
+                        </div>
+                        
+                        <!-- URL Input -->
+                        <div class="image-tab-content" id="tabUrl">
+                            <input type="url" class="form-input" id="inputFoto" placeholder="https://example.com/foto-ikan.jpg">
+                            <small class="form-hint">Masukkan URL gambar dari internet</small>
+                        </div>
+                        
+                        <!-- File Upload -->
+                        <div class="image-tab-content hidden" id="tabFile">
+                            <div class="file-upload-wrapper">
+                                <input type="file" id="inputFile" accept="image/*" onchange="handleFileSelect(event)">
+                                <label for="inputFile" class="file-upload-label">
+                                    <span class="file-icon">📁</span>
+                                    <span class="file-text">Pilih file gambar atau drag & drop di sini</span>
+                                    <span class="file-hint">PNG, JPG, JPEG (max 5MB)</span>
+                                </label>
+                            </div>
+                            <small class="form-hint">File akan dikonversi ke Base64 (untuk demo)</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Preview Foto</label>
+                        <div class="image-preview" id="imagePreview">
+                            <span>Preview akan muncul di sini</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Deskripsi</label>
+                        <textarea class="form-input form-textarea" id="inputDeskripsi" rows="3" placeholder="Deskripsi lengkap tentang ikan..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-white" onclick="closeModal()">Batal</button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== DELETE CONFIRM MODAL ==================== -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal modal-sm">
+            <h2 class="modal-title">Konfirmasi Hapus</h2>
+            <p class="modal-text">Apakah Anda yakin ingin menghapus ikan <strong id="deleteKode"></strong>?</p>
+            <input type="hidden" id="deleteId">
+            <div class="form-actions">
+                <button type="button" class="btn btn-white" onclick="closeDeleteModal()">Batal</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDelete()">Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <a href="index.html" class="logo">
+                    <img src="assets/fish.png" alt="Logo Toko Ikan">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script src="assets/js/supabase.js"></script>
+    <script>
+        // ==========================================
+        // ADMIN PAGE SCRIPTS
+        // ==========================================
+        
+        let allProducts = [];
+        let currentFilter = 'all';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check if user is admin
+            const user = getCurrentUser();
+            if (!user || user.role !== 'admin') {
+                alert('Akses ditolak! Halaman ini hanya untuk admin.');
+                window.location.href = 'index.html';
+                return;
+            }
+            console.log('🔑 Admin access granted:', user.email);
+            
+            await loadProducts();
+            setupImagePreview();
+        });
+
+        // Load all products
+        async function loadProducts() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="loading-cell">
+                        <div class="loading-spinner"></div>
+                        Memuat data...
+                    </td>
+                </tr>
+            `;
+
+            allProducts = await getAllIkan();
+            updateStats();
+            renderTable();
+        }
+
+        // Update statistics
+        function updateStats() {
+            const tersedia = allProducts.filter(p => p.status_ikan === 'Tersedia').length;
+            const dipesan = allProducts.filter(p => p.status_ikan === 'Dipesan').length;
+            const terjual = allProducts.filter(p => p.status_ikan === 'Terjual').length;
+
+            document.getElementById('statTersedia').textContent = tersedia;
+            document.getElementById('statDipesan').textContent = dipesan;
+            document.getElementById('statTerjual').textContent = terjual;
+            document.getElementById('statTotal').textContent = allProducts.length;
+        }
+
+        // Render table
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            let filtered = allProducts;
+
+            // Apply filter
+            if (currentFilter !== 'all') {
+                filtered = allProducts.filter(p => p.status_ikan === currentFilter);
+            }
+
+            // Apply search
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            if (searchQuery) {
+                filtered = filtered.filter(p => 
+                    p.kode_ikan.toLowerCase().includes(searchQuery) ||
+                    p.lokasi.toLowerCase().includes(searchQuery) ||
+                    (p.kategori && p.kategori.toLowerCase().includes(searchQuery))
+                );
+            }
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty-cell">
+                            <p>Tidak ada data ikan</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(ikan => `
+                <tr>
+                    <td>
+                        <div class="table-image">
+                            ${ikan.url_foto 
+                                ? `<img src="${ikan.url_foto}" alt="${ikan.kode_ikan}" onerror="this.style.display='none'">` 
+                                : ''}
+                        </div>
+                    </td>
+                    <td><strong>${ikan.kode_ikan}</strong></td>
+                    <td>${formatRupiah(ikan.harga)}</td>
+                    <td>${ikan.lokasi}</td>
+                    <td>${ikan.kategori || '-'}</td>
+                    <td>
+                        <span class="status-badge status-${ikan.status_ikan.toLowerCase()}">${ikan.status_ikan}</span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-icon btn-edit" onclick="openEditModal(${ikan.id})" title="Edit">✏️</button>
+                            <button class="btn-icon btn-delete" onclick="openDeleteModal(${ikan.id}, '${ikan.kode_ikan}')" title="Hapus">🗑️</button>
+                            ${ikan.status_ikan === 'Dipesan' ? `
+                                <button class="btn-icon btn-confirm" onclick="markAsSold(${ikan.id})" title="Tandai Terjual">✅</button>
+                            ` : ''}
+                            ${ikan.status_ikan === 'Terjual' ? `
+                                <button class="btn-icon btn-restore" onclick="markAsAvailable(${ikan.id})" title="Kembalikan">↩️</button>
+                            ` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Filter by status
+        function filterByStatus(status) {
+            currentFilter = status;
+            
+            // Update active tab
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.filter === status);
+            });
+            
+            renderTable();
+        }
+
+        // Search handler
+        document.getElementById('searchInput').addEventListener('input', () => {
+            renderTable();
+        });
+
+        // ==========================================
+        // MODAL FUNCTIONS
+        // ==========================================
+
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = 'Tambah Ikan Baru';
+            document.getElementById('productForm').reset();
+            document.getElementById('editId').value = '';
+            document.getElementById('imagePreview').innerHTML = '<span>Preview akan muncul di sini</span>';
+            document.getElementById('productModal').classList.add('active');
+        }
+
+        async function openEditModal(id) {
+            const ikan = allProducts.find(p => p.id === id);
+            if (!ikan) return;
+
+            document.getElementById('modalTitle').textContent = 'Edit Ikan: ' + ikan.kode_ikan;
+            document.getElementById('editId').value = id;
+            document.getElementById('inputHarga').value = ikan.harga;
+            document.getElementById('inputLokasi').value = ikan.lokasi;
+            document.getElementById('inputKategori').value = ikan.kategori || '';
+            document.getElementById('inputFoto').value = ikan.url_foto || '';
+            document.getElementById('inputDeskripsi').value = ikan.deskripsi || '';
+
+            // Show preview
+            if (ikan.url_foto) {
+                document.getElementById('imagePreview').innerHTML = `<img src="${ikan.url_foto}" alt="Preview">`;
+            } else {
+                document.getElementById('imagePreview').innerHTML = '<span>Preview akan muncul di sini</span>';
+            }
+
+            document.getElementById('productModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').classList.remove('active');
+        }
+
+        function openDeleteModal(id, kode) {
+            document.getElementById('deleteId').value = id;
+            document.getElementById('deleteKode').textContent = kode;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+        }
+
+        // ==========================================
+        // FORM HANDLERS
+        // ==========================================
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+            
+            const editId = document.getElementById('editId').value;
+            const data = {
+                harga: parseInt(document.getElementById('inputHarga').value),
+                lokasi: document.getElementById('inputLokasi').value.trim(),
+                kategori: document.getElementById('inputKategori').value || null,
+                url_foto: document.getElementById('inputFoto').value.trim() || null,
+                deskripsi: document.getElementById('inputDeskripsi').value.trim() || null
+            };
+
+            let result;
+            if (editId) {
+                // Update
+                result = await updateIkan(parseInt(editId), data);
+            } else {
+                // Create
+                result = await createIkan(data);
+            }
+
+            if (result.success) {
+                showNotification(editId ? 'Ikan berhasil diperbarui!' : 'Ikan berhasil ditambahkan!', 'success');
+                closeModal();
+                await loadProducts();
+            } else {
+                showNotification('Error: ' + result.error, 'error');
+            }
+        }
+
+        async function confirmDelete() {
+            const id = parseInt(document.getElementById('deleteId').value);
+            const result = await deleteIkan(id);
+
+            if (result.success) {
+                showNotification('Ikan berhasil dihapus!', 'success');
+                closeDeleteModal();
+                await loadProducts();
+            } else {
+                showNotification('Error: ' + result.error, 'error');
+            }
+        }
+
+        async function markAsSold(id) {
+            const result = await updateStatusIkan(id, STATUS_IKAN.TERJUAL);
+            if (result.success) {
+                showNotification('Status diubah menjadi Terjual!', 'success');
+                await loadProducts();
+            }
+        }
+
+        async function markAsAvailable(id) {
+            const result = await updateStatusIkan(id, STATUS_IKAN.TERSEDIA);
+            if (result.success) {
+                showNotification('Status diubah menjadi Tersedia!', 'success');
+                await loadProducts();
+            }
+        }
+
+        // Image preview
+        function setupImagePreview() {
+            document.getElementById('inputFoto').addEventListener('input', (e) => {
+                const url = e.target.value.trim();
+                const preview = document.getElementById('imagePreview');
+                
+                if (url) {
+                    preview.innerHTML = `<img src="${url}" alt="Preview" onerror="this.parentElement.innerHTML='<span>Gambar tidak valid</span>'">`;
+                } else {
+                    preview.innerHTML = '<span>Preview akan muncul di sini</span>';
+                }
+            });
+        }
+
+        // Switch image input tab
+        function switchImageTab(tab) {
+            const tabUrl = document.getElementById('tabUrl');
+            const tabFile = document.getElementById('tabFile');
+            const buttons = document.querySelectorAll('.image-input-tabs .tab-btn');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            if (tab === 'url') {
+                tabUrl.classList.remove('hidden');
+                tabFile.classList.add('hidden');
+                buttons[0].classList.add('active');
+            } else {
+                tabUrl.classList.add('hidden');
+                tabFile.classList.remove('hidden');
+                buttons[1].classList.add('active');
+            }
+        }
+
+        // Handle file select
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Check file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                showNotification('Ukuran file maksimal 5MB', 'error');
+                return;
+            }
+
+            // Check file type
+            if (!file.type.startsWith('image/')) {
+                showNotification('File harus berupa gambar', 'error');
+                return;
+            }
+
+            // Convert to base64
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64 = e.target.result;
+                document.getElementById('inputFoto').value = base64;
+                document.getElementById('imagePreview').innerHTML = `<img src="${base64}" alt="Preview">`;
+                
+                // Update file label
+                const label = document.querySelector('.file-upload-label .file-text');
+                if (label) label.textContent = file.name;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Logout
+        function handleLogout() {
+            signOut();
+            window.location.href = 'index.html';
+        }
+    </script>
+
+</body>
+</html>

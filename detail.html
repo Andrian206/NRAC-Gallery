@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Ikan - Toko Ikan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/detail.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <!-- ==================== HEADER ==================== -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <img src="assets/fish.png" alt="Logo Toko Ikan">
+                </a>
+
+                <!-- Search Bar -->
+                <div class="search-wrapper">
+                    <input type="text" id="searchInput" placeholder="Ikan anda menunggu anda" class="search-input">
+                </div>
+
+                <!-- Navigation (Guest) -->
+                <div class="nav-buttons" id="navGuest">
+                    <a href="index.html" class="btn-link">Sign up</a>
+                    <a href="index.html" class="btn-outline">Sign in</a>
+                </div>
+
+                <!-- Navigation (User) -->
+                <div class="nav-buttons hidden" id="navUser">
+                    <a href="cart.html" class="btn-link">Keranjang</a>
+                    <a href="profile.html" class="btn-outline">Profile</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main>
+        <div class="container">
+            <!-- Back Link -->
+            <a href="index.html" class="back-link">&larr; Kembali ke Beranda</a>
+            
+            <!-- Detail Container -->
+            <div class="detail-container" id="detailContainer">
+                <!-- Loading State -->
+                <div class="loading" style="grid-column: 1 / -1;">
+                    <div class="loading-spinner"></div>
+                    <p>Memuat detail ikan...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <a href="index.html" class="logo">
+                    <img src="assets/fish.png" alt="Logo Toko Ikan">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script src="assets/js/supabase.js"></script>
+    <script>
+        // ==========================================
+        // DETAIL PAGE SCRIPTS
+        // ==========================================
+
+        let currentIkan = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('📄 Detail page loaded');
+            await checkUserSession();
+            await loadDetail();
+        });
+
+        // Check user session
+        async function checkUserSession() {
+            try {
+                const user = await getCurrentUser();
+                if (user) {
+                    console.log('👤 User logged in:', user.email);
+                    document.getElementById('navGuest').classList.add('hidden');
+                    document.getElementById('navUser').classList.remove('hidden');
+                } else {
+                    document.getElementById('navGuest').classList.remove('hidden');
+                    document.getElementById('navUser').classList.add('hidden');
+                }
+            } catch (error) {
+                console.error('Session check error:', error);
+            }
+        }
+
+        // Load fish detail
+        async function loadDetail() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+
+            console.log('🔍 Loading detail for ID:', id);
+
+            if (!id) {
+                showError('ID ikan tidak ditemukan');
+                return;
+            }
+
+            try {
+                const ikan = await getIkanById(id);
+                
+                if (!ikan) {
+                    showError('Ikan tidak ditemukan');
+                    return;
+                }
+
+                console.log('🐟 Fish detail loaded:', ikan);
+                currentIkan = ikan;
+                document.title = `${ikan.kode_ikan} - Toko Ikan`;
+                renderDetail(ikan);
+            } catch (error) {
+                console.error('Load detail error:', error);
+                showError('Gagal memuat detail ikan');
+            }
+        }
+
+        function showError(message) {
+            document.getElementById('detailContainer').innerHTML = `
+                <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 60px;">
+                    <h3>${message}</h3>
+                    <a href="index.html" class="btn btn-primary" style="margin-top: 20px;">Kembali ke Homepage</a>
+                </div>
+            `;
+        }
+
+        // Render detail
+        function renderDetail(ikan) {
+            const container = document.getElementById('detailContainer');
+            
+            const statusClass = ikan.status_ikan.toLowerCase().replace(' ', '-');
+            
+            container.innerHTML = `
+                <!-- Image -->
+                <div class="detail-image">
+                    ${ikan.url_foto 
+                        ? `<img src="${ikan.url_foto}" alt="${ikan.kode_ikan}" onerror="this.style.display='none'">` 
+                        : '<div class="no-image">Tidak ada gambar</div>'}
+                </div>
+
+                <!-- Info -->
+                <div class="detail-info">
+                    <div class="detail-header">
+                        <h1 class="detail-kode">${ikan.kode_ikan}</h1>
+                        <span class="status-badge status-${statusClass}">${ikan.status_ikan}</span>
+                    </div>
+                    <h2 class="detail-price">${formatRupiah(ikan.harga)}</h2>
+                    
+                    <div class="detail-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Lokasi:</span>
+                            <span class="meta-value">${ikan.lokasi}</span>
+                        </div>
+                        ${ikan.kategori ? `
+                        <div class="meta-item">
+                            <span class="meta-label">Kategori:</span>
+                            <span class="meta-value">${ikan.kategori}</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    ${ikan.deskripsi ? `
+                    <div class="detail-description">
+                        <h3>Deskripsi</h3>
+                        <p>${ikan.deskripsi}</p>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="detail-actions">
+                        ${ikan.status_ikan === 'Tersedia' ? `
+                            <button class="btn btn-primary" onclick="addToCart()">+ Keranjang</button>
+                            <button class="btn btn-success" onclick="buyNow()">Beli Langsung</button>
+                        ` : `
+                            <button class="btn btn-secondary" disabled>
+                                ${ikan.status_ikan === 'Dipesan' ? 'Sedang Dipesan' : 'Sudah Terjual'}
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Add to cart
+        async function addToCart() {
+            try {
+                const user = await getCurrentUser();
+                if (!user) {
+                    showNotification('Silakan login terlebih dahulu', 'error');
+                    setTimeout(() => window.location.href = 'index.html', 1500);
+                    return;
+                }
+
+                if (currentIkan) {
+                    const result = addToKeranjang(currentIkan.id);
+                    if (result.success) {
+                        showNotification('Berhasil ditambahkan ke keranjang!', 'success');
+                    } else {
+                        showNotification(result.message, 'info');
+                    }
+                }
+            } catch (error) {
+                console.error('Add to cart error:', error);
+                showNotification('Gagal menambahkan ke keranjang', 'error');
+            }
+        }
+
+        // Buy now
+        async function buyNow() {
+            try {
+                const user = await getCurrentUser();
+                if (!user) {
+                    showNotification('Silakan login terlebih dahulu', 'error');
+                    setTimeout(() => window.location.href = 'index.html', 1500);
+                    return;
+                }
+
+                if (currentIkan) {
+                    // Add to cart and redirect
+                    addToKeranjang(currentIkan.id);
+                    window.location.href = 'cart.html';
+                }
+            } catch (error) {
+                console.error('Buy now error:', error);
+                showNotification('Terjadi kesalahan', 'error');
+            }
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                window.location.href = `index.html?search=${encodeURIComponent(e.target.value)}`;
+            }
+        });
+    </script>
+
+</body>
+</html>

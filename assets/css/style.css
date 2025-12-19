@@ -1,0 +1,7 @@
+/* ==========================================
+   DEPRECATED - Use global.css instead
+   This file is kept for backwards compatibility
+   ========================================== */
+
+/* Import global styles */
+@import url('./global.css');
